@@ -13,13 +13,14 @@ Prerequisites:
     1. Pig installed.
     2. Luigi installed.
     3. The client.cfg file in this directory updated with your s3 and pig settings.
+    4. Your Mortar project checked out locally
 
     By default this script will run Pig in local mode.  To run the Pig job on a Hadoop cluster ensure that
     you have Pig configured to connect to your Hadoop cluster and remove the "-x local" options from the
     method pig_options below.
 
 To run:
-    python run-olympics-luigi-job.py --local-scheduler --email <Your Email>
+    python run-mortar-examples-luigi-job.py --local-scheduler --email <Your Email> --mortar-project-root <Absolute path to your Mortar project>
 
 """
 
@@ -29,7 +30,7 @@ class MortarPigTask(PigJobTask):
     """
     email = luigi.Parameter(default=None)
 
-    #If you're running a Mortar project, this parameter is the path to the root of the project.
+    #If you're running a Mortar project, this parameter is the absolute path to the root of the project.
     mortar_project_root = luigi.Parameter(default=None)
 
     root_path = None
@@ -101,7 +102,7 @@ class MortarPigTask(PigJobTask):
 class OlympicsPigTask(MortarPigTask):
 
     def pig_script_path(self):
-        return 'olympics.pig'
+        return "%s/pigscripts/excite.pig" % (self.mortar_project_root)
 
     def pig_parameters(self):
         # Call base class for standard Mortar parameters
