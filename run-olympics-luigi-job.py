@@ -23,13 +23,12 @@ To run:
 
 """
 
-class MyPigTask(PigJobTask):
+class MortarPigTask(PigJobTask):
+    """
+    Base Luigi task for running a Mortar script.
+    """
     email = luigi.Parameter(default=None)
-
     root_path = None
-
-    def pig_script_path(self):
-        return 'olympics.pig'
 
     def pig_env_vars(self):
         return {
@@ -64,8 +63,6 @@ class MyPigTask(PigJobTask):
             params['MORTAR_EMAIL'] = self.email
             params['MORTAR_EMAIL_S3_ESCAPED'] = self._s3_safe(self.email)
 
-        # Set script specific parameters here
-
         return params
 
     def pig_options(self):
@@ -75,12 +72,6 @@ class MyPigTask(PigJobTask):
         options += ['-x', 'local']
 
         return options
-
-    def requires(self):
-        return []
-
-    def output(self):
-        return [S3Target('s3n://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/searches_by_age_bucket2')]
 
     def _additional_jars(self):
         return '%s/lib-cluster/*.jar' % (self._get_root_path())
@@ -99,5 +90,25 @@ class MyPigTask(PigJobTask):
     def _s3_safe(self, s):
         return re.sub("[^0-9a-zA-Z]", '-', s)
 
+
+class OlympicsPigTask(MortarPigTask):
+
+    def pig_script_path(self):
+        return 'olympics.pig'
+
+    def pig_parameters(self):
+        # Call base class for standard Mortar parameters
+        params = super(OlympicsPigTask, self).pig_parameters()
+        # Add script specific parameters here.
+        return params
+
+    def requires(self):
+        return []
+
+    def output(self):
+        return [S3Target('s3n://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/olympics')]
+
+    
+
 if __name__ == "__main__":
-    luigi.run(main_task_cls=MyPigTask)
+    luigi.run(main_task_cls=OlympicsPigTask)

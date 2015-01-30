@@ -9,9 +9,6 @@ athletes  = LOAD 's3://mortar-example-data/olympics/OlympicAthletes.csv'
            USING org.apache.pig.piggybank.storage.CSVExcelStorage(',', 'YES_MULTILINE', 'NOCHANGE', 'SKIP_INPUT_HEADER') AS (
                  athlete:chararray, country:chararray, year:int, sport:chararray, gold:int, silver:int, bronze:int, total:int);
         
-----Insert Code Below
-----Hint: Go to the footer of this script and hover over "Pig Statements"
-
 -- Storing data to a S3 output bucket
 rmf s3://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/olympics;
 STORE athletes
