@@ -20,7 +20,7 @@ Prerequisites:
     method pig_options below.
 
 To run:
-    python run-mortar-examples-luigi-job.py --local-scheduler --email <Your Email> --mortar-project-root <Absolute path to your Mortar project>
+    python run-mortar-project-luigi.py --local-scheduler --email <Your Email> --mortar-project-root <Absolute path to your Mortar project>
 
 """
 
@@ -99,14 +99,14 @@ class MortarPigTask(PigJobTask):
         return re.sub("[^0-9a-zA-Z]", '-', s)
 
 
-class OlympicsPigTask(MortarPigTask):
+class ExcitePigTask(MortarPigTask):
 
     def pig_script_path(self):
         return "%s/pigscripts/excite.pig" % (self.mortar_project_root)
 
     def pig_parameters(self):
         # Call base class for standard Mortar parameters
-        params = super(OlympicsPigTask, self).pig_parameters()
+        params = super(ExcitePigTask, self).pig_parameters()
         # Add script specific parameters here.
         return params
 
@@ -116,7 +116,7 @@ class OlympicsPigTask(MortarPigTask):
     def output(self):
         return [S3Target('s3n://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/olympics')]
 
-    
+
 
 if __name__ == "__main__":
     luigi.run(main_task_cls=OlympicsPigTask)
