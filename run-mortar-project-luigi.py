@@ -130,9 +130,8 @@ class ExcitePigTask(MortarPigTask):
         return []
 
     def output(self):
-        return [S3Target('s3n://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/olympics')]
-
+        return [S3Target('s3n://mortar-example-output-data/$MORTAR_EMAIL_S3_ESCAPED/excite')]
 
 
 if __name__ == "__main__":
-    luigi.run(main_task_cls=OlympicsPigTask)
+    luigi.run(main_task_cls=ExcitePigTask)
