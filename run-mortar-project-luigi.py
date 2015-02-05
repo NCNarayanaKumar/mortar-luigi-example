@@ -40,7 +40,7 @@ To run:
 
 """
 
-class MortarPigTask(PigJobTask):
+class MortarStylePigTask(PigJobTask):
     """
     Base Luigi task for running a Mortar script.
     """
@@ -115,7 +115,7 @@ class MortarPigTask(PigJobTask):
         return re.sub("[^0-9a-zA-Z]", '-', s)
 
 
-class ExcitePigTask(MortarPigTask):
+class ExcitePigTask(MortarStylePigTask):
 
     def pig_script_path(self):
         return "%s/pigscripts/excite.pig" % (self.mortar_project_root)
